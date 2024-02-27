@@ -17,18 +17,13 @@ import (
 )
 
 type KorgNanoKontrol2 struct {
-	log zerolog.Logger
-	// DeviceInfo device.DeviceInfo
+	log        zerolog.Logger
 	DeviceName string
 }
 
 func New(name string) *KorgNanoKontrol2 {
 	return &KorgNanoKontrol2{
-		log: log.With().Str("device", "Korg nanoKontrol2").Logger(),
-		// DeviceInfo: device.DeviceInfo{
-		// 	Manufacturer: device.Manufacturer{ManufacturerID: sysex.Korg, Name: sysex.Korg.String()},
-		// 	Model:        "nanoKontrol2",
-		// },
+		log:        log.With().Str("device", "Korg nanoKontrol2").Logger(),
 		DeviceName: name,
 	}
 }
@@ -132,19 +127,6 @@ func (d *KorgNanoKontrol2) sceneDumpRequestMessage(channel byte) *device.SysExMe
 		}
 		sceneMidiData := bytes[12:]
 		sceneData := korg.MidiDataToData(sceneMidiData)
-		// orig := korg.DataToMidiData(sceneData)
-		// fmt.Println(orig)
-
-		// manufacturerId := bytes[0]
-		// globalMidiChannel := sceneMidiData[0]
-		// controlMode := sceneMidiData[1]
-		// ledMode := sceneMidiData[2]
-		// log.Info().Msgf("Global MIDI channel 0x%X", globalMidiChannel)
-		// log.Info().Msgf("Manufacturer ID 0x%X", manufacturerId)
-		// log.Info().Msgf("Control mode 0x%X", controlMode)
-		// log.Info().Msgf("LED mode 0x%X", ledMode)
-		// log.Info().Msgf("Scene data length %d", len(sceneData))
-		// log.Info().Msgf("Scene data % X", sceneData)
 		return bytes, sceneData, nil
 	}
 	return device.NewSysExMessage(request, responseHandler)
@@ -205,30 +187,6 @@ func (d *KorgNanoKontrol2) sceneWriteMessage(channel byte) *device.SysExMessage 
 		return bytes, nil, nil
 	}
 	return device.NewSysExMessage(request, responseHandler)
-}
-
-func (d *KorgNanoKontrol2) OnStart(c chan []byte, out drivers.Out) {
-	// response := d.identityMessage(0).Send(c, out, d.log)
-	// response := d.searchDeviceMessage(0x45).Send(c, out, d.log)
-	// response := d.modeMessage(0).Send(c, out, d.log)
-	// response := d.sceneDumpRequestMessage(0).Send(c, out, d.log)
-	// d.log.Info().Msgf("Response % X", response)
-
-	// _, sceneData, err := d.sceneDumpRequestMessage(0).Send(c, out, d.log)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// d.log.Info().Msgf("Processed scene data % X", sceneData)
-
-	// LED mode to 0x1
-	// sceneData[2] = 0x1
-	// d.log.Info().Msgf("Updated scene data % X", sceneData)
-
-	// response := d.sceneDumpMessage(0, dataToMidiData(scene)).Send(c, out, d.log)
-	// d.log.Info().Msgf("Dump response % X", response)
-
-	// response = d.sceneWriteMessage(0).Send(c, out, d.log)
-	// d.log.Info().Msgf("Write response % X", response)
 }
 
 func (d *KorgNanoKontrol2) UpdateRules(
@@ -415,14 +373,5 @@ func (d *KorgNanoKontrol2) UpdateRules(
 			updatedRules = append(updatedRules, rule)
 		}
 	}
-	// LED mode to 0x1
-	// sceneData[2] = 0x1
-	// d.log.Info().Msgf("Updated scene data % X", sceneData)
-
-	// response := d.sceneDumpMessage(0, dataToMidiData(scene)).Send(c, out, d.log)
-	// d.log.Info().Msgf("Dump response % X", response)
-
-	// response = d.sceneWriteMessage(0).Send(c, out, d.log)
-	// d.log.Info().Msgf("Write response % X", response)
 	return updatedRules
 }

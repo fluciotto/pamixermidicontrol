@@ -1,6 +1,6 @@
 midiDevices:
   - name: Akai LPD8
-    type: AkaiLpd8
+    type: Generic
     midiInName: LPD8 MIDI 1
     midiOutName: LPD8 MIDI 1
 
@@ -8,11 +8,9 @@ rules:
   # Master
   - midiMessage:
       deviceName: Akai LPD8
-      # [
-      #   Pad[1-8]/[Note|ControlChange|ProgramChange] |
-      #   Knob[1-8]
-      # ]
-      deviceControlPath: Knob1
+      type: ControlChange
+      channel: 1
+      controller: 1
     actions:
       - type: SetVolume
         target:
@@ -24,7 +22,9 @@ rules:
           name: UMC204HD 192k Line B
   - midiMessage:
       deviceName: Akai LPD8
-      deviceControlPath: Pad5/ControlChange
+      type: ControlChange
+      channel: 1
+      controller: 14
     actions:
       - type: ToggleMute
         target:
@@ -37,7 +37,9 @@ rules:
   # Browser
   - midiMessage:
       deviceName: Akai LPD8
-      deviceControlPath: Knob2
+      type: ControlChange
+      channel: 1
+      controller: 2
     actions:
       - type: SetVolume
         target:
@@ -45,7 +47,9 @@ rules:
           name: Google Chrome
   - midiMessage:
       deviceName: Akai LPD8
-      deviceControlPath: Pad6/ControlChange
+      type: ControlChange
+      channel: 1
+      controller: 15
     actions:
       - type: ToggleMute
         target:
@@ -54,7 +58,9 @@ rules:
   # Spotify
   - midiMessage:
       deviceName: Akai LPD8
-      deviceControlPath: Knob3
+      type: ControlChange
+      channel: 1
+      controller: 3
     actions:
       - type: SetVolume
         target:
@@ -62,7 +68,9 @@ rules:
           name: Spotify
   - midiMessage:
       deviceName: Akai LPD8
-      deviceControlPath: Pad7/ControlChange
+      type: ControlChange
+      channel: 1
+      controller: 16
     actions:
       - type: ToggleMute
         target:
@@ -71,7 +79,9 @@ rules:
   # Discord
   - midiMessage:
       deviceName: Akai LPD8
-      deviceControlPath: Knob4
+      type: ControlChange
+      channel: 1
+      controller: 4
     actions:
       - type: SetVolume
         target:
@@ -79,7 +89,9 @@ rules:
           name: Discord
   - midiMessage:
       deviceName: Akai LPD8
-      deviceControlPath: Pad8/ControlChange
+      type: ControlChange
+      channel: 1
+      controller: 17
     actions:
       - type: ToggleMute
         target:
@@ -88,7 +100,9 @@ rules:
   # Games
   - midiMessage:
       deviceName: Akai LPD8
-      deviceControlPath: Knob5
+      type: ControlChange
+      channel: 1
+      controller: 5
     actions:
       - type: SetVolume
         target:
@@ -96,7 +110,9 @@ rules:
           name: Rocket League
   - midiMessage:
       deviceName: Akai LPD8
-      deviceControlPath: Pad1/ControlChange
+      type: ControlChange
+      channel: 1
+      controller: 10
     actions:
       - type: ToggleMute
         target:

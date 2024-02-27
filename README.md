@@ -4,7 +4,7 @@ pamixermidicontrol is a tool for controlling your PulseAudio setup from a MIDI c
 
 It is based on https://github.com/solarnz/pamidicontrol/, with the following differences:
 - no longer based on D-Bus as the drop-in replacement for PulseAudio server, pipewire-pulse, does not have D-Bus support (https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/1127)
-- SysEx capabilities to simplify configuration with automatic retrieval of controller setup (Korg nanoKontrol2, Akai LPD8 in "PAD" mode)
+- SysEx capabilities to simplify configuration with automatic retrieval of controller setup (Korg nanoKontrol2, Akai LPD8)
 - handle multiple controllers simultaneously
 - handle MIDI note and program change in addition to control change
 - configuration checking
@@ -66,7 +66,7 @@ rules:
             Transport/[Rewind|FastForward|Stop|Play|Rec]
           ]
         Akai LPD8:
-          [ Pad[1-8] | Knob[1-8] ]
+          [ Pad[1-8]/[Note|ControlChange|ProgramChange] | Knob[1-8] ]
       >
 
       # Optional if the device type is "KorgNanoKontrol2" or "AkaiLpd8"

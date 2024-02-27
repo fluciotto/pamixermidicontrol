@@ -17,18 +17,13 @@ import (
 )
 
 type AkaiLpd8 struct {
-	log zerolog.Logger
-	// DeviceInfo device.DeviceInfo
+	log        zerolog.Logger
 	DeviceName string
 }
 
 func New(name string) *AkaiLpd8 {
 	return &AkaiLpd8{
-		log: log.With().Str("device", "Akai LPD8").Logger(),
-		// DeviceInfo: device.DeviceInfo{
-		// 	Manufacturer: device.Manufacturer{ManufacturerID: sysex.Akai, Name: sysex.Akai.String()},
-		// 	Model:        "LPD8",
-		// },
+		log:        log.With().Str("device", "Akai LPD8").Logger(),
 		DeviceName: name,
 	}
 }
@@ -97,31 +92,6 @@ func (d *AkaiLpd8) programRequestMessage(programNumber byte) *device.SysExMessag
 	return device.NewSysExMessage(request, responseHandler)
 }
 
-func (d *AkaiLpd8) OnStart(c chan []byte, out drivers.Out) {
-	// response, _, _ := d.identityMessage(0).Send(c, out, d.log)
-	_, activeProgram, _ := d.activeProgramRequestMessage().Send(c, out, d.log)
-	d.log.Info().Msgf("Active program % X", activeProgram)
-
-	response, program, _ := d.programRequestMessage(activeProgram[0]).Send(c, out, d.log)
-	d.log.Info().Msgf("Response % X, program % X", response, program)
-
-	// _, sceneData, err := d.sceneDumpRequestMessage(0).Send(c, out, d.log)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// d.log.Info().Msgf("Processed scene data % X", sceneData)
-
-	// LED mode to 0x1
-	// sceneData[2] = 0x1
-	// d.log.Info().Msgf("Updated scene data % X", sceneData)
-
-	// response := d.sceneDumpMessage(0, dataToMidiData(scene)).Send(c, out, d.log)
-	// d.log.Info().Msgf("Dump response % X", response)
-
-	// response = d.sceneWriteMessage(0).Send(c, out, d.log)
-	// d.log.Info().Msgf("Write response % X", response)
-}
-
 func (d *AkaiLpd8) UpdateRules(
 	rules []configuration.Rule,
 	c chan []byte,
@@ -149,7 +119,10 @@ func (d *AkaiLpd8) UpdateRules(
 		}
 		if rule.MidiMessage.DeviceControlPath != "" {
 			//
-			padRe := regexp.MustCompile("^Pad([1-8])$")
+			padRe := regexp.MustCompile("^Pad([1-8])/.*$")
+			padNoteRe := regexp.MustCompile("^Pad([1-8])/Note$")
+			padControlChangeRe := regexp.MustCompile("^Pad([1-8])/ControlChange$")
+			padProgramChangeRe := regexp.MustCompile("^Pad([1-8])/ProgramChange$")
 			knobRe := regexp.MustCompile("^Knob([1-8])$")
 
 			//
@@ -160,12 +133,16 @@ func (d *AkaiLpd8) UpdateRules(
 				padIndex := 1 + (padNumber-1)*4
 				// Update rule
 				rule.MidiMessage.Channel = globalMidiChannel
-				rule.MidiMessage.Type = configuration.Note
-				rule.MidiMessage.Controller = programData[padIndex]
-				// rule.MidiMessage.Type = configuration.ControlChange
-				// rule.MidiMessage.Controller = programData[padIndex+2]
-				// rule.MidiMessage.Type = configuration.ProgramChange
-				// rule.MidiMessage.Controller = programData[padIndex+1]
+				if padNoteRe.MatchString(rule.MidiMessage.DeviceControlPath) {
+					rule.MidiMessage.Type = configuration.Note
+				} else if padControlChangeRe.MatchString(rule.MidiMessage.DeviceControlPath) {
+					rule.MidiMessage.Type = configuration.ControlChange
+				} else if padProgramChangeRe.MatchString(rule.MidiMessage.DeviceControlPath) {
+					rule.MidiMessage.Type = configuration.ProgramChange
+				}
+				rule.MidiMessage.Note = programData[padIndex]
+				rule.MidiMessage.Controller = programData[padIndex+2]
+				rule.MidiMessage.Program = programData[padIndex+1]
 				rule.MidiMessage.MinValue = 0x0
 				rule.MidiMessage.MaxValue = 0x7f
 				updatedRules = append(updatedRules, rule)
