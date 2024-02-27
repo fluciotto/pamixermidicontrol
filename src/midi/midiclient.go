@@ -160,7 +160,9 @@ func (client *MidiClient) Run() {
 				var velocity uint8
 				message.GetNoteOn(&channel, &note, &velocity)
 				rules := lo.Filter(client.Rules, func(rule configuration.Rule, i int) bool {
-					return rule.MidiMessage.Type == configuration.Note && rule.MidiMessage.Channel == channel && rule.MidiMessage.Note == note
+					return rule.MidiMessage.Type == configuration.Note &&
+						rule.MidiMessage.Channel == channel &&
+						rule.MidiMessage.Note == note
 				})
 				for _, rule := range rules {
 					doActions(rule, velocity)
@@ -171,7 +173,9 @@ func (client *MidiClient) Run() {
 				var ccValue uint8
 				message.GetControlChange(&channel, &controller, &ccValue)
 				rules := lo.Filter(client.Rules, func(rule configuration.Rule, i int) bool {
-					return rule.MidiMessage.Type == configuration.ControlChange && rule.MidiMessage.Channel == channel && rule.MidiMessage.Controller == controller
+					return rule.MidiMessage.Type == configuration.ControlChange &&
+						rule.MidiMessage.Channel == channel &&
+						rule.MidiMessage.Controller == controller
 				})
 				for _, rule := range rules {
 					doActions(rule, ccValue)
@@ -181,23 +185,13 @@ func (client *MidiClient) Run() {
 				var program uint8
 				message.GetProgramChange(&channel, &program)
 				rules := lo.Filter(client.Rules, func(rule configuration.Rule, i int) bool {
-					return rule.MidiMessage.Type == configuration.ProgramChange && rule.MidiMessage.Channel == channel && rule.MidiMessage.Program == program
+					return rule.MidiMessage.Type == configuration.ProgramChange &&
+						rule.MidiMessage.Channel == channel &&
+						rule.MidiMessage.Program == program
 				})
 				for _, rule := range rules {
 					doActions(rule, 0x7f)
 				}
-				// for _, rule := range client.Rules {
-				// 	if rule.MidiMessage.Type != configuration.ProgramChange {
-				// 		continue
-				// 	}
-				// 	if channel != rule.MidiMessage.Channel {
-				// 		continue
-				// 	}
-				// 	if program != rule.MidiMessage.Program {
-				// 		continue
-				// 	}
-				// 	doActions(rule, 0x7f)
-				// }
 			case midi.SysExMsg:
 				var bytes []byte
 				message.GetSysEx(&bytes)
