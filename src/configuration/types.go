@@ -44,7 +44,7 @@ type PulseAudioActionType string
 
 const (
 	SetVolume        PulseAudioActionType = "SetVolume"
-	Mute             PulseAudioActionType = "Mute"
+	ToggleMute       PulseAudioActionType = "ToggleMute"
 	SetDefaultOutput PulseAudioActionType = "SetDefaultOutput"
 )
 

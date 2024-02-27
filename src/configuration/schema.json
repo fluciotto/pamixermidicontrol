@@ -91,7 +91,7 @@
           "properties": {
             "type": {
               "type": "string",
-              "enum": ["SetVolume", "Mute"]
+              "enum": ["SetVolume", "ToggleMute"]
             },
             "target": {
               "type": "object",

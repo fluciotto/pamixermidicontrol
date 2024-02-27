@@ -131,7 +131,7 @@ func (client *MidiClient) Run() {
 					if err := client.PAClient.ProcessVolumeAction(action, volumePercent); err != nil {
 						client.log.Error().Err(err)
 					}
-				case configuration.Mute:
+				case configuration.ToggleMute:
 					if value == 0 {
 						return
 					}
