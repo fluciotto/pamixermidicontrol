@@ -20,23 +20,91 @@ Pre-requisites:
 - go 1.22
 - PulseAudio (no need for module-dbus-protocol)
 - portmidi library
-    Arch linux: `pacman -S portmidi`
-    Debian-based linux: `apt-get install libportmidi-dev`
+    - Arch linux: `pacman -S portmidi`
+    - Debian-based linux: `apt-get install libportmidi-dev`
 
 ```
 go get github.com/fluciotto/pamixermidicontrol
+make
 ```
 
 ## Configuration
 
-pamixermidicontrol requires the use of a configuration file. Place the config file under `$HOME/.config/pamixermidicontrol/config.yaml`.
-You can checkout the [example configuration file](https://github.com/fluciotto/pamixermidicontrol/blob/master/config.yaml) to see how to configure pamixermidicontrol.
-You must set a bare-minimum the Input and Output midi device names.
+pamixermidicontrol requires the use of a configuration file.
+
+Place the config file under `$HOME/.config/pamixermidicontrol/config.yaml`.
+
+### Examples
+
+Some configuration examples are available: [example configuration files](https://github.com/fluciotto/pamixermidicontrol/tree/master/config-examples).
+
+### Configuration format
+
+```
+midiDevices:
+
+  - name: <MIDI device custom name, must be unique accross midiDevices>
+    type: <"Generic" | "KorgNanoKontrol2" | "AkaiLpd8">
+    # pamixermidicontrol --list-midi
+    midiInName: <MIDI device IN port name>
+    midiOutName: <MIDI device OUT port name>
+  - ...
+
+rules:
+
+  - midiMessage:
+      deviceName: <MIDI device custom name>
+
+      # Only if the device is "KorgNanoKontrol2" or "AkaiLpd8"
+      deviceControlPath: <
+        Korg nanoKontrol2:
+          [
+            Group[1-8]/[Slider|Knob|Solo|Mute|Record] |
+            Transport/Track/[Prev|Next] |
+            Transport/Cycle |
+            Transport/Marker/[Set|Prev|Next] |
+            Transport/[Rewind|FastForward|Stop|Play|Rec]
+          ]
+        Akai LPD8:
+          [ Pad[1-8] | Knob[1-8] ]
+      >
+
+      # Optional if the device type is "KorgNanoKontrol2" or "AkaiLpd8"
+      # Mandatory if the device is "Generic"
+      type: <"Note" | "ControlChange" | "ProgramChange">
+      channel: <0-15>
+      # if type is "Note"
+      note: <0-127>
+      # else if type is "ControlChange"
+      controller: <0-127>
+      # else if type is "ProgramChange"
+      program: <0-127>
+      # only if type is "ControlChange"
+      minValue: <0-127, optional, default 0>
+      maxValue: <0-127, optional, default 127>
+
+    actions:
+      - type: <"SetVolume" | "ToggleMute" | "SetDefaultOutput">
+        # if type is "SetVolume" or "ToggleMute"
+        target:
+          type: <"Output" | "Input" | "PlaybackStream" | "RecordStream">
+          # pamixermidicontrol --list-pulse
+          name: <PulseAudio output, input, playback stream or record stream name, can be "Default" if type is "Input" or "Output">
+        # else if type is "SetDefaultOutput"
+        target:
+          # pamixermidicontrol --list-pulse
+          name: <PulseAudio output name>
+      - ...
+
+  - ...
+```
+
+How to get available MIDI ports names?
+
+run `pamixermidicontrol --list-midi`
+
+How to get available PulseAudio objects names?
+
+run `pamixermidicontrol --list-pulse`
 
 pamixermidicontrol will print to stderr all of the midi control messages it gets, so you can easily build up your configuration file iteratively.
-
-# Troubleshooting
-
-## panic: runtime error: invalid memory address or nil pointer dereference on startup
-
-Make sure that the names you have configured for `InputMidiName` / `OutputMidiName` actually exist.
