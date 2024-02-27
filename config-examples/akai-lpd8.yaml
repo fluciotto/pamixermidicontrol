@@ -1,0 +1,104 @@
+midiDevices:
+  - name: Akai LPD8
+    type: AkaiLpd8
+    midiInName: LPD8 MIDI 1
+    midiOutName: LPD8 MIDI 1
+
+rules:
+  # Master
+  - midiMessage:
+      deviceName: Akai LPD8
+      # [
+      #   Pad[1-8] |
+      #   Knob[1-8]
+      # ]
+      deviceControlPath: Knob1
+    actions:
+      - type: SetVolume
+        target:
+          type: OutputDevice
+          name: UMC204HD 192k Line A
+      - type: SetVolume
+        target:
+          type: OutputDevice
+          name: UMC204HD 192k Line B
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Pad5
+    actions:
+      - type: Mute
+        target:
+          type: OutputDevice
+          name: UMC204HD 192k Line A
+      - type: Mute
+        target:
+          type: OutputDevice
+          name: UMC204HD 192k Line B
+  # Browser
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Knob2
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Google Chrome
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Pad6
+    actions:
+      - type: Mute
+        target:
+          type: PlaybackStream
+          name: Google Chrome
+  # Spotify
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Knob3
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Spotify
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Pad7
+    actions:
+      - type: Mute
+        target:
+          type: PlaybackStream
+          name: Spotify
+  # Discord
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Knob4
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Discord
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Pad8
+    actions:
+      - type: Mute
+        target:
+          type: PlaybackStream
+          name: Discord
+  # Games
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Knob5
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Rocket League
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Pad1
+    actions:
+      - type: Mute
+        target:
+          type: PlaybackStream
+          name: Rocket League

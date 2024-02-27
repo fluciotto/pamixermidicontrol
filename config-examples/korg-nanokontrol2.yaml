@@ -1,0 +1,122 @@
+midiDevices:
+  - name: Korg nanoKontrol2
+    type: KorgNanoKontrol2
+    midiInName: nanoKONTROL2 nanoKONTROL2 _ CTR
+    midiOutName: nanoKONTROL2 nanoKONTROL2 _ CTR
+
+rules:
+  # Master
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      # Korg nanoKontrol2 device control paths
+      # [
+      #   Group[1-8]/[Slider|Knob|Solo|Mute|Record] |
+      #   Transport/Track/[Prev|Next] |
+      #   Transport/Cycle |
+      #   Transport/Marker/[Set|Prev|Next] |
+      #   Transport/[Rewind|FastForward|Stop|Play|Rec]
+      # ]
+      deviceControlPath: Group1/Slider
+    actions:
+      - type: SetVolume
+        target:
+          type: OutputDevice
+          name: Default
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group1/Mute
+    actions:
+      - type: Mute
+        target:
+          type: OutputDevice
+          name: Default
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Transport/Track/Prev
+    actions:
+      - type: SetDefaultOutput
+        target:
+          name: UMC204HD 192k Line A
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Transport/Track/Next
+    actions:
+      - type: SetDefaultOutput
+        target:
+          name: UMC204HD 192k Line B
+  # Browser
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group2/Slider
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Google Chrome
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Firefox
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group2/Mute
+    actions:
+      - type: Mute
+        target:
+          type: PlaybackStream
+          name: Google Chrome
+      - type: Mute
+        target:
+          type: PlaybackStream
+          name: Firefox
+  # Spotify
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group3/Slider
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: spotify
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group3/Mute
+    actions:
+      - type: Mute
+        target:
+          type: PlaybackStream
+          name: spotify
+  # Discord
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group4/Slider
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Chromium
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group4/Mute
+    actions:
+      - type: Mute
+        target:
+          type: PlaybackStream
+          name: Chromium
+  # Games
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group5/Slider
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Rocket League
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group5/Mute
+    actions:
+      - type: Mute
+        target:
+          type: PlaybackStream
+          name: Rocket League

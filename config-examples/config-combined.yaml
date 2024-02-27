@@ -1,0 +1,44 @@
+midiDevices:
+  - name: Korg nanoKontrol2
+    type: KorgNanoKontrol2
+    midiInName: nanoKONTROL2 nanoKONTROL2 _ CTR
+    midiOutName: nanoKONTROL2 nanoKONTROL2 _ CTR
+  - name: Akai LPD8
+    type: AkaiLpd8
+    midiInName: LPD8 MIDI 1
+    midiOutName: LPD8 MIDI 1
+
+rules:
+  # Master
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group1/Slider
+    actions:
+      - type: SetVolume
+        target:
+          type: OutputDevice
+          name: Default
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      deviceControlPath: Group1/Mute
+    actions:
+      - type: Mute
+        target:
+          type: OutputDevice
+          name: Default
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Knob1
+    actions:
+      - type: SetVolume
+        target:
+          type: OutputDevice
+          name: Default
+  - midiMessage:
+      deviceName: Akai LPD8
+      deviceControlPath: Pad5
+    actions:
+      - type: Mute
+        target:
+          type: OutputDevice
+          name: Default

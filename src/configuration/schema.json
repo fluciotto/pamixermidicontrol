@@ -1,0 +1,175 @@
+{
+  "$id": "https://github.com/fluciotto/pamixermidicontrol/schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pamixermidicontrol configuration schema",
+  "description": "pamixermidicontrol configuration schema",
+  "definitions": {
+    "midiDevice": {
+      "description": "MIDI device",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["Generic", "KorgNanoKontrol2", "AkaiLpd8"]
+        },
+        "midiInName": {
+          "type": "string"
+        },
+        "midiOutName": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "type", "midiInName", "midiOutName"]
+    },
+    "midiMessage": {
+      "description": "Rule MIDI message",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "deviceName": {
+              "description": "Device name",
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["ControlChange", "Note", "ProgramChange"]
+            },
+            "channel": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 15
+            },
+            "controller": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127,
+              "default": 0
+            },
+            "minValue": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127,
+              "default": 127
+            },
+            "maxValue": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127
+            }
+          },
+          "required": [
+            "deviceName",
+            "type",
+            "channel",
+            "controller"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "deviceName": {
+              "description": "Device name",
+              "type": "string"
+            },
+            "deviceControlPath": {
+              "type": "string"
+            }
+          },
+          "required": ["deviceName", "deviceControlPath"]
+        }
+      ]
+    },
+    "action": {
+      "description": "Rule action",
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["SetVolume", "Mute"]
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "description": "Target type",
+                  "type": "string",
+                  "enum": [
+                    "OutputDevice",
+                    "InputDevice",
+                    "PlaybackStream",
+                    "RecordStream"
+                  ]
+                },
+                "name": {
+                  "description": "Target name",
+                  "type": "string"
+                }
+              },
+              "required": ["type", "name"]
+            }
+          },
+          "required": ["type", "target"]
+        },
+        {
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["SetDefaultOutput"]
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Target name",
+                  "type": "string"
+                }
+              },
+              "required": ["name"]
+            }
+          },
+          "required": ["type", "target"]
+        }
+      ]
+    },
+    "rule": {
+      "description": "Rule",
+      "type": "object",
+      "properties": {
+        "midiMessage": {
+          "$ref": "#/definitions/midiMessage"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/action"
+          }
+        }
+      },
+      "required": ["midiMessage", "actions"]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "midiDevices": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/midiDevice"
+      },
+      "minItems": 1
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/rule"
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["midiDevices", "rules"]
+}

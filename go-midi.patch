@@ -1,0 +1,11 @@
+--- /dev/null	2024-02-23 11:21:34.707458256 -0300
++++ vendor/gitlab.com/gomidi/midi/v2/drivers/portmididrv/imported/portmidi/porttime.go	2024-02-23 11:21:50.411585344 -0300
+@@ -15,7 +15,7 @@
+ // Package portmidi provides PortMidi bindings.
+ package portmidi
+ 
+-// #cgo linux LDFLAGS: -lporttime
++// #cgo linux LDFLAGS: -lportmidi
+ // #cgo windows LDFLAGS: -lporttime
+ // #cgo darwin LDFLAGS: -lportmidi
+ //

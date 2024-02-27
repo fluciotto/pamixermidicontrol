@@ -1,0 +1,47 @@
+midiDevices:
+  - name: Keystation Mini 32
+    type: Generic
+    midiInName: Keystation Mini 32 MIDI 1
+    midiOutName: Keystation Mini 32 MIDI 1
+
+rules:
+  # Master
+  - midiMessage:
+      # Volume knob
+      deviceName: Keystation Mini 32
+      type: ControlChange
+      channel: 0
+      controller: 7
+      # minValue: 0x0
+      # maxValue: 0x7f
+    actions:
+      - type: SetVolume
+        target:
+          type: OutputDevice
+          name: Default
+  - midiMessage:
+      # Rec button
+      deviceName: Keystation Mini 32
+      type: ControlChange
+      channel: 0
+      controller: 64
+      # minValue: 0x0
+      # maxValue: 0x7f
+    actions:
+      - type: Mute
+        target:
+          type: OutputDevice
+          name: Default
+  - midiMessage:
+      # Key C3
+      deviceName: Keystation Mini 32
+      type: Note
+      channel: 0
+      controller: 48
+      # minValue: 0x0
+      # maxValue: 0x7f
+    actions:
+      - type: Mute
+        target:
+          type: OutputDevice
+          name: Default
