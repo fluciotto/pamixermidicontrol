@@ -24,62 +24,124 @@
       },
       "required": ["name", "type", "midiInName", "midiOutName"]
     },
+    "noteMidiMessage": {
+      "description": "Rule custom MIDI message",
+      "type": "object",
+      "properties": {
+        "deviceName": {
+          "description": "Device name",
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "const": "Note"
+        },
+        "channel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "note": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127,
+          "default": 0
+        }
+      },
+      "required": ["deviceName", "type", "channel", "note"]
+    },
+    "controlChangeMidiMessage": {
+      "description": "Rule custom MIDI message",
+      "type": "object",
+      "properties": {
+        "deviceName": {
+          "description": "Device name",
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "const": "ControlChange"
+        },
+        "channel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "controller": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127,
+          "default": 0
+        },
+        "minValue": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127,
+          "default": 0
+        },
+        "maxValue": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127,
+          "default": 127
+        }
+      },
+      "required": ["deviceName", "type", "channel", "controller"]
+    },
+    "programChangeMidiMessage": {
+      "description": "Rule custom MIDI message",
+      "type": "object",
+      "properties": {
+        "deviceName": {
+          "description": "Device name",
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "const": "ProgramChange"
+        },
+        "channel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "program": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127,
+          "default": 0
+        }
+      },
+      "required": ["deviceName", "type", "channel", "program"]
+    },
+    "knownDeviceMidiMessage": {
+      "description": "Rule MIDI message",
+      "type": "object",
+      "properties": {
+        "deviceName": {
+          "description": "Device name",
+          "type": "string"
+        },
+        "deviceControlPath": {
+          "type": "string"
+        }
+      },
+      "required": ["deviceName", "deviceControlPath"]
+    },
     "midiMessage": {
       "description": "Rule MIDI message",
       "oneOf": [
         {
-          "type": "object",
-          "properties": {
-            "deviceName": {
-              "description": "Device name",
-              "type": "string"
-            },
-            "type": {
-              "type": "string",
-              "enum": ["ControlChange", "Note", "ProgramChange"]
-            },
-            "channel": {
-              "type": "integer",
-              "minimum": 0,
-              "maximum": 15
-            },
-            "controller": {
-              "type": "integer",
-              "minimum": 0,
-              "maximum": 127,
-              "default": 0
-            },
-            "minValue": {
-              "type": "integer",
-              "minimum": 0,
-              "maximum": 127,
-              "default": 127
-            },
-            "maxValue": {
-              "type": "integer",
-              "minimum": 0,
-              "maximum": 127
-            }
-          },
-          "required": [
-            "deviceName",
-            "type",
-            "channel",
-            "controller"
-          ]
+          "$ref": "#/definitions/noteMidiMessage"
         },
         {
-          "type": "object",
-          "properties": {
-            "deviceName": {
-              "description": "Device name",
-              "type": "string"
-            },
-            "deviceControlPath": {
-              "type": "string"
-            }
-          },
-          "required": ["deviceName", "deviceControlPath"]
+          "$ref": "#/definitions/controlChangeMidiMessage"
+        },
+        {
+          "$ref": "#/definitions/programChangeMidiMessage"
+        },
+        {
+          "$ref": "#/definitions/knownDeviceMidiMessage"
         }
       ]
     },
