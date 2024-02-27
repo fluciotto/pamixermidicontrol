@@ -37,9 +37,7 @@ rules:
       deviceName: Keystation Mini 32
       type: Note
       channel: 0
-      controller: 48
-      # minValue: 0x0
-      # maxValue: 0x7f
+      note: 48
     actions:
       - type: ToggleMute
         target:

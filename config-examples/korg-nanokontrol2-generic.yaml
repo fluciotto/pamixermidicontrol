@@ -1,0 +1,138 @@
+midiDevices:
+  - name: Korg nanoKontrol2
+    type: Generic
+    midiInName: nanoKONTROL2 nanoKONTROL2 _ CTR
+    midiOutName: nanoKONTROL2 nanoKONTROL2 _ CTR
+
+rules:
+  # Master
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 0
+    actions:
+      - type: SetVolume
+        target:
+          type: OutputDevice
+          name: Default
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 48
+    actions:
+      - type: ToggleMute
+        target:
+          type: OutputDevice
+          name: Default
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 58
+    actions:
+      - type: SetDefaultOutput
+        target:
+          name: UMC204HD 192k Line A
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 59
+    actions:
+      - type: SetDefaultOutput
+        target:
+          name: UMC204HD 192k Line B
+  # Browser
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 1
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Google Chrome
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Firefox
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 49
+    actions:
+      - type: ToggleMute
+        target:
+          type: PlaybackStream
+          name: Google Chrome
+      - type: ToggleMute
+        target:
+          type: PlaybackStream
+          name: Firefox
+  # Spotify
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 2
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: spotify
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 50
+    actions:
+      - type: ToggleMute
+        target:
+          type: PlaybackStream
+          name: spotify
+  # Discord
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 3
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Chromium
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 51
+    actions:
+      - type: ToggleMute
+        target:
+          type: PlaybackStream
+          name: Chromium
+  # Games
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 4
+    actions:
+      - type: SetVolume
+        target:
+          type: PlaybackStream
+          name: Rocket League
+  - midiMessage:
+      deviceName: Korg nanoKontrol2
+      type: ControlChange
+      channel: 0
+      controller: 52
+    actions:
+      - type: ToggleMute
+        target:
+          type: PlaybackStream
+          name: Rocket League
