@@ -11,6 +11,7 @@ import (
 	"github.com/fluciotto/pamixermidicontrol/src/pulseaudio"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 )
 
 func Run() {
@@ -57,7 +58,10 @@ func Run() {
 
 	// Create MIDI clients
 	for _, midiDevice := range config.MidiDevices {
-		midiClient := midi.NewMidiClient(paClient, midiDevice, config.Rules)
+		deviceRules := lo.Filter(config.Rules, func(rule configuration.Rule, i int) bool {
+			return rule.MidiMessage.DeviceName == midiDevice.Name
+		})
+		midiClient := midi.NewMidiClient(paClient, midiDevice, deviceRules)
 		go midiClient.Run()
 	}
 

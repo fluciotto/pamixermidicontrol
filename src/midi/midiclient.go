@@ -7,6 +7,7 @@ import (
 	"github.com/fluciotto/pamixermidicontrol/src/pulseaudio"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 	"gitlab.com/gomidi/midi/v2"
 
 	driver "gitlab.com/gomidi/midi/v2/drivers/portmididrv"
@@ -158,16 +159,10 @@ func (client *MidiClient) Run() {
 				var note uint8
 				var velocity uint8
 				message.GetNoteOn(&channel, &note, &velocity)
-				for _, rule := range client.Rules {
-					if rule.MidiMessage.Type != configuration.Note {
-						continue
-					}
-					if channel != rule.MidiMessage.Channel {
-						continue
-					}
-					if note != rule.MidiMessage.Controller {
-						continue
-					}
+				rules := lo.Filter(client.Rules, func(rule configuration.Rule, i int) bool {
+					return rule.MidiMessage.Type == configuration.Note && rule.MidiMessage.Channel == channel && rule.MidiMessage.Note == note
+				})
+				for _, rule := range rules {
 					doActions(rule, velocity)
 				}
 			case midi.ControlChangeMsg:
@@ -175,31 +170,34 @@ func (client *MidiClient) Run() {
 				var controller uint8
 				var ccValue uint8
 				message.GetControlChange(&channel, &controller, &ccValue)
-				for _, rule := range client.Rules {
-					if rule.MidiMessage.Type != configuration.ControlChange {
-						continue
-					}
-					if channel != rule.MidiMessage.Channel {
-						continue
-					}
-					if controller != rule.MidiMessage.Controller {
-						continue
-					}
+				rules := lo.Filter(client.Rules, func(rule configuration.Rule, i int) bool {
+					return rule.MidiMessage.Type == configuration.ControlChange && rule.MidiMessage.Channel == channel && rule.MidiMessage.Controller == controller
+				})
+				for _, rule := range rules {
 					doActions(rule, ccValue)
 				}
 			case midi.ProgramChangeMsg:
 				var channel uint8
 				var program uint8
 				message.GetProgramChange(&channel, &program)
-				for _, rule := range client.Rules {
-					if rule.MidiMessage.Type != configuration.ProgramChange {
-						continue
-					}
-					if channel != rule.MidiMessage.Channel {
-						continue
-					}
+				rules := lo.Filter(client.Rules, func(rule configuration.Rule, i int) bool {
+					return rule.MidiMessage.Type == configuration.ProgramChange && rule.MidiMessage.Channel == channel && rule.MidiMessage.Program == program
+				})
+				for _, rule := range rules {
 					doActions(rule, 0x7f)
 				}
+				// for _, rule := range client.Rules {
+				// 	if rule.MidiMessage.Type != configuration.ProgramChange {
+				// 		continue
+				// 	}
+				// 	if channel != rule.MidiMessage.Channel {
+				// 		continue
+				// 	}
+				// 	if program != rule.MidiMessage.Program {
+				// 		continue
+				// 	}
+				// 	doActions(rule, 0x7f)
+				// }
 			case midi.SysExMsg:
 				var bytes []byte
 				message.GetSysEx(&bytes)

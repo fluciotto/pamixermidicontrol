@@ -35,7 +35,9 @@ type MidiMessage struct {
 	DeviceControlPath string          `yaml:"deviceControlPath"`
 	Type              MidiMessageType `yaml:"type"`
 	Channel           uint8           `yaml:"channel"`
+	Note              uint8           `yaml:"note"`
 	Controller        uint8           `yaml:"controller"`
+	Program           uint8           `yaml:"program"`
 	MinValue          uint8           `yaml:"minValue"`
 	MaxValue          uint8           `yaml:"maxValue"`
 }
