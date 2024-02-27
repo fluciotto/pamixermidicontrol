@@ -22,7 +22,7 @@ rules:
       deviceName: Korg nanoKontrol2
       deviceControlPath: Group1/Mute
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: OutputDevice
           name: Default
@@ -38,7 +38,7 @@ rules:
       deviceName: Akai LPD8
       deviceControlPath: Pad5
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: OutputDevice
           name: Default

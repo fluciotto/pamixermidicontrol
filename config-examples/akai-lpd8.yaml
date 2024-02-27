@@ -26,11 +26,11 @@ rules:
       deviceName: Akai LPD8
       deviceControlPath: Pad5
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: OutputDevice
           name: UMC204HD 192k Line A
-      - type: Mute
+      - type: ToggleMute
         target:
           type: OutputDevice
           name: UMC204HD 192k Line B
@@ -47,7 +47,7 @@ rules:
       deviceName: Akai LPD8
       deviceControlPath: Pad6
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: PlaybackStream
           name: Google Chrome
@@ -64,7 +64,7 @@ rules:
       deviceName: Akai LPD8
       deviceControlPath: Pad7
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: PlaybackStream
           name: Spotify
@@ -81,7 +81,7 @@ rules:
       deviceName: Akai LPD8
       deviceControlPath: Pad8
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: PlaybackStream
           name: Discord
@@ -98,7 +98,7 @@ rules:
       deviceName: Akai LPD8
       deviceControlPath: Pad1
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: PlaybackStream
           name: Rocket League

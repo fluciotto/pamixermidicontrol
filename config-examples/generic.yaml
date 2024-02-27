@@ -28,7 +28,7 @@ rules:
       # minValue: 0x0
       # maxValue: 0x7f
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: OutputDevice
           name: Default
@@ -41,7 +41,7 @@ rules:
       # minValue: 0x0
       # maxValue: 0x7f
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: OutputDevice
           name: Default

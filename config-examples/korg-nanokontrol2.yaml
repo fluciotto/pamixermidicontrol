@@ -26,7 +26,7 @@ rules:
       deviceName: Korg nanoKontrol2
       deviceControlPath: Group1/Mute
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: OutputDevice
           name: Default
@@ -61,11 +61,11 @@ rules:
       deviceName: Korg nanoKontrol2
       deviceControlPath: Group2/Mute
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: PlaybackStream
           name: Google Chrome
-      - type: Mute
+      - type: ToggleMute
         target:
           type: PlaybackStream
           name: Firefox
@@ -82,7 +82,7 @@ rules:
       deviceName: Korg nanoKontrol2
       deviceControlPath: Group3/Mute
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: PlaybackStream
           name: spotify
@@ -99,7 +99,7 @@ rules:
       deviceName: Korg nanoKontrol2
       deviceControlPath: Group4/Mute
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: PlaybackStream
           name: Chromium
@@ -116,7 +116,7 @@ rules:
       deviceName: Korg nanoKontrol2
       deviceControlPath: Group5/Mute
     actions:
-      - type: Mute
+      - type: ToggleMute
         target:
           type: PlaybackStream
           name: Rocket League
