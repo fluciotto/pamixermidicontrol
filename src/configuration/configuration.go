@@ -2,6 +2,7 @@ package configuration
 
 import (
 	_ "embed"
+	"fmt"
 	"os"
 	"strings"
 
@@ -28,6 +29,9 @@ func Load() (Config, error) {
 			break
 		}
 		content, _ = os.ReadFile(path)
+	}
+	if content == nil {
+		return config, fmt.Errorf("could not find configuration file at %s", paths[len(paths)-1])
 	}
 	// Unmarshal and check
 	err := yaml.Unmarshal(content, &rawConfig)
