@@ -14,6 +14,12 @@ import (
 	"github.com/samber/lo"
 )
 
+var (
+	commit    string
+	version   string
+	buildTime string
+)
+
 func Run() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339})
 
@@ -28,6 +34,7 @@ func Run() {
 	opt.Bool("list", false, opt.Alias("l"), opt.Description("List MIDI ports & PulseAudio objects"))
 	opt.Bool("list-midi", false, opt.Alias("m"), opt.Description("List MIDI ports"))
 	opt.Bool("list-pulse", false, opt.Alias("p"), opt.Description("List PulseAudio objects"))
+	opt.Bool("version", false, opt.Alias("v"), opt.Description("Show version"))
 	opt.Parse(os.Args[1:])
 	if opt.Called("help") {
 		fmt.Fprint(os.Stderr, opt.Help())
@@ -44,6 +51,10 @@ func Run() {
 	}
 	if opt.Called("list-pulse") {
 		paClient.List()
+		os.Exit(0)
+	}
+	if opt.Called("version") {
+		fmt.Printf("Version %s, commit %s, built on %s\n", version, commit, buildTime)
 		os.Exit(0)
 	}
 
