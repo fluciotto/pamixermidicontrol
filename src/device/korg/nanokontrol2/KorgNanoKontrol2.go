@@ -263,64 +263,61 @@ func (d *KorgNanoKontrol2) UpdateRules(
 				updatedRules = append(updatedRules, rule)
 			} else if transportRe.MatchString(rule.MidiMessage.DeviceControlPath) {
 				sceneDataTransportIndex := 251
+				rule.MidiMessage.Channel = sceneData[sceneDataTransportIndex]
+				if rule.MidiMessage.Channel == 16 {
+					rule.MidiMessage.Channel = globalMidiChannel
+				}
 				if transportTrackRe.MatchString(rule.MidiMessage.DeviceControlPath) {
 					matches := transportTrackRe.FindStringSubmatch(rule.MidiMessage.DeviceControlPath)
 					control := matches[1]
-					// Update rule
-					rule.MidiMessage.Channel = sceneData[sceneDataTransportIndex]
-					if rule.MidiMessage.Channel == 16 {
-						rule.MidiMessage.Channel = globalMidiChannel
-					}
 					if control == "Prev" {
-						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataTransportIndex+1])
-						rule.MidiMessage.Controller = sceneData[sceneDataTransportIndex+3]
-						rule.MidiMessage.MinValue = sceneData[sceneDataTransportIndex+4]
-						rule.MidiMessage.MaxValue = sceneData[sceneDataTransportIndex+5]
+						sceneDataIndex := 252
+						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex])
+						rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
+						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					} else if control == "Next" {
-						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataTransportIndex+7])
-						rule.MidiMessage.Controller = sceneData[sceneDataTransportIndex+9]
-						rule.MidiMessage.MinValue = sceneData[sceneDataTransportIndex+10]
-						rule.MidiMessage.MaxValue = sceneData[sceneDataTransportIndex+11]
+						sceneDataIndex := 258
+						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex])
+						rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
+						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					}
 					updatedRules = append(updatedRules, rule)
 				} else if transportCycleRe.MatchString(rule.MidiMessage.DeviceControlPath) {
-					sceneDataCycleIndex := 264
-					// Update rule
-					rule.MidiMessage.Channel = sceneData[sceneDataTransportIndex]
-					if rule.MidiMessage.Channel == 16 {
-						rule.MidiMessage.Channel = globalMidiChannel
-					}
-					rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataCycleIndex+1])
-					rule.MidiMessage.Controller = sceneData[sceneDataCycleIndex+3]
-					rule.MidiMessage.MinValue = sceneData[sceneDataCycleIndex+4]
-					rule.MidiMessage.MaxValue = sceneData[sceneDataCycleIndex+5]
+					sceneDataIndex := 264
+					rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex])
+					rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
+					rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
+					rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
+					rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					updatedRules = append(updatedRules, rule)
 				} else if transportMarkerRe.MatchString(rule.MidiMessage.DeviceControlPath) {
 					matches := transportMarkerRe.FindStringSubmatch(rule.MidiMessage.DeviceControlPath)
 					control := matches[1]
-					// Update rule
-					rule.MidiMessage.Channel = sceneData[sceneDataTransportIndex]
-					if rule.MidiMessage.Channel == 16 {
-						rule.MidiMessage.Channel = globalMidiChannel
-					}
 					if control == "Set" {
 						sceneDataIndex := 270
-						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex+1])
-						rule.MidiMessage.Controller = sceneData[sceneDataIndex+3]
-						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+4]
-						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+5]
+						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex])
+						rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
+						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					} else if control == "Prev" {
 						sceneDataIndex := 276
-						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex+1])
-						rule.MidiMessage.Controller = sceneData[sceneDataIndex+3]
-						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+4]
-						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+5]
+						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex])
+						rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
+						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					} else if control == "Next" {
 						sceneDataIndex := 282
-						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex+1])
-						rule.MidiMessage.Controller = sceneData[sceneDataIndex+3]
-						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+4]
-						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+5]
+						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex])
+						rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
+						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					}
 					updatedRules = append(updatedRules, rule)
 				} else if transportBottomRe.MatchString(rule.MidiMessage.DeviceControlPath) {
@@ -334,33 +331,38 @@ func (d *KorgNanoKontrol2) UpdateRules(
 					if control == "Rewind" {
 						sceneDataIndex := 288
 						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex])
+						rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
 						rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
 						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
 						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					} else if control == "FastForward" {
 						sceneDataIndex := 294
 						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex])
+						rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
 						rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
 						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
 						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					} else if control == "Stop" {
 						sceneDataIndex := 300
 						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex])
+						rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
 						rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
 						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
 						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					} else if control == "Play" {
 						sceneDataIndex := 306
 						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex])
+						rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
 						rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
 						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
 						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					} else if control == "Rec" {
 						sceneDataIndex := 312
 						rule.MidiMessage.Type = assignTypeToMidiMessageType(sceneData[sceneDataIndex+1])
-						rule.MidiMessage.Controller = sceneData[sceneDataIndex+3]
-						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+4]
-						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+5]
+						rule.MidiMessage.Note = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.Controller = sceneData[sceneDataIndex+2]
+						rule.MidiMessage.MinValue = sceneData[sceneDataIndex+3]
+						rule.MidiMessage.MaxValue = sceneData[sceneDataIndex+4]
 					}
 					updatedRules = append(updatedRules, rule)
 				} else {
