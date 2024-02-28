@@ -15,32 +15,38 @@ import (
 //go:embed schema.json
 var schema []byte
 
-func Load() (Config, error) {
+func Load() (Config, string, error) {
+	var configPath string
 	var config Config
 	var rawConfig map[string]interface{}
 	var content []byte
 	// Read configuration file
+	homeDir, _ := os.UserHomeDir()
 	paths := [...]string{
 		"./config.yaml",
-		"${HOME}/.config/pamixermidicontrol/config.yaml",
+		fmt.Sprintf("%s/.config/pamixermidicontrol/config.yaml", homeDir),
 	}
 	for _, path := range paths {
 		if content != nil {
 			break
 		}
-		content, _ = os.ReadFile(path)
+		fileContent, err := os.ReadFile(path)
+		if err == nil {
+			configPath = path
+			content = fileContent
+		}
 	}
 	if content == nil {
-		return config, fmt.Errorf("could not find configuration file at %s", paths[len(paths)-1])
+		return config, "", fmt.Errorf("could not find configuration file at %s", paths[len(paths)-1])
 	}
 	// Unmarshal and check
 	err := yaml.Unmarshal(content, &rawConfig)
 	if err != nil {
-		return config, err
+		return config, configPath, err
 	}
 	err = check(rawConfig)
 	if err != nil {
-		return config, err
+		return config, configPath, err
 	}
 	// Real unmarshal
 	err = yaml.Unmarshal(content, &config)
@@ -54,12 +60,12 @@ func Load() (Config, error) {
 			}
 			action.RawTarget.Decode(iface)
 			if err != nil {
-				return config, err
+				return config, configPath, err
 			}
 			config.Rules[i].Actions[j].Target = iface
 		}
 	}
-	return config, err
+	return config, configPath, err
 }
 
 func check(configMap map[string]interface{}) error {

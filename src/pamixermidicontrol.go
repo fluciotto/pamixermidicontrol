@@ -59,12 +59,12 @@ func Run() {
 	}
 
 	// Configuration
-	config, err := configuration.Load()
+	config, path, err := configuration.Load()
 	if err != nil {
 		log.Error().Msgf("Configuration error %+v", err)
 		os.Exit(1)
 	}
-	log.Info().Msg("Loaded configuration")
+	log.Info().Msgf("Loaded configuration from %s", path)
 	// fmt.Printf("%+v\n", config)
 
 	// Create MIDI clients
