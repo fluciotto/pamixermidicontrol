@@ -102,8 +102,13 @@ func (client *PAClient) refreshStreams() error {
 		panic(err)
 	}
 	client.playbackStreams = lo.Map(sinksInputs, func(sinkInput pulseaudio.SinkInput, i int) Stream {
+		var name string
+		name = sinkInput.PropList["application.name"]
+		if len(name) < 1 {
+			name = sinkInput.PropList["media.name"]
+		}
 		return Stream{
-			name:     sinkInput.PropList["application.name"],
+			name:     name,
 			fullName: sinkInput.PropList["module-stream-restore.id"],
 			paStream: sinkInput,
 		}
@@ -114,8 +119,13 @@ func (client *PAClient) refreshStreams() error {
 		panic(err)
 	}
 	client.recordStreams = lo.Map(sourcesOutputs, func(sourceOutput pulseaudio.SourceOutput, i int) Stream {
+		var name string
+		name = sourceOutput.PropList["application.name"]
+		if len(name) < 1 {
+			name = sourceOutput.PropList["media.name"]
+		}
 		return Stream{
-			name:     sourceOutput.PropList["application.name"],
+			name:     name,
 			fullName: sourceOutput.PropList["module-stream-restore.id"],
 			paStream: sourceOutput,
 		}
